@@ -6,6 +6,7 @@
 #define I2C_SDA 8
 #define I2C_SCL 9
 #define PIN_NEOPIXEL 48 
+#define PIXEL_BRIGHTNESS 50
 #define NUMPIXELS 1
 
 Adafruit_NeoPixel pixel(NUMPIXELS, PIN_NEOPIXEL, NEO_GRB + NEO_KHZ800);
@@ -13,8 +14,10 @@ INA226 INA(0x40);
 Adafruit_MPU6050 mpu;
 
 float offX = 0, offY = 0, offZ = 0;
+unsigned long startTime = 0;
 
 void setLED(uint32_t color) {
+  pixel.setBrightness(PIXEL_BRIGHTNESS);
   pixel.setPixelColor(0, color);
   pixel.show();
 }
@@ -26,7 +29,7 @@ void setup() {
   setLED(pixel.Color(0, 0, 150)); // Blue: Booting
 
   // I2C
-  Wire.begin(I2C_SDA, I2C_SCL, 100000); 
+  Wire.begin(I2C_SDA, I2C_SCL, 400000);  // 400kHz Fast Mode
 
   bool ina_ok = INA.begin();
   bool mpu_ok = mpu.begin();
@@ -64,6 +67,7 @@ void setup() {
 
   setLED(pixel.Color(0, 150, 0)); // Green: Ready
   Serial.println("System Ready!");
+  startTime = millis();  // <-- Added: capture time after calibration
 }
 
 void loop() {
@@ -72,7 +76,7 @@ void loop() {
     float busV = INA.getBusVoltage();
     float current_mA = (INA.getShuntVoltage() * 1000.0) / 0.1;
 
-    Serial.print(millis()); Serial.print(",");
+    Serial.print(millis() - startTime); Serial.print(",");  // <-- Changed
     Serial.print(busV, 2); Serial.print(",");
     Serial.print(current_mA, 2); Serial.print(",");
     Serial.print(a.acceleration.x - offX, 3); Serial.print(",");
@@ -82,5 +86,5 @@ void loop() {
     // หาก Sensor หลุดระหว่างทำงาน ให้ไฟเป็นสีแดง
     setLED(pixel.Color(150, 0, 0));
   }
-  delay(100);
+  delay(10);
 }
