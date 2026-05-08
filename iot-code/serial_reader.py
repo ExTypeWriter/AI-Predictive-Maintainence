@@ -2,12 +2,12 @@ import serial
 import keyboard
 import os
 # การตั้งค่าพอร์ตและความเร็ว
-PORT = 'COM7' 
+PORT = 'COM11' 
 BAUDRATE = 115200
-FILENAME = 'fan_speed_3.csv'
+FILENAME = 'fail_data.csv'
 
 data_list = []
-MAX_ROWS = 120000
+MAX_ROWS = 125000
 
 print(f"Connecting to {PORT} at {BAUDRATE} baud...")
 
@@ -18,10 +18,10 @@ try:
     print(">>> Press 'q' to stop and save the data. <<<")
 
     while True:
-        # ตรวจจับการกดปุ่ม 'q' เพื่อออกจากลูป
-        if keyboard.is_pressed('q'):
-            print("\n'q' pressed. Stopping data collection...")
-            break
+        # # ตรวจจับการกดปุ่ม 'q' เพื่อออกจากลูป
+        # if keyboard.is_pressed('q'):
+        #     print("\n'q' pressed. Stopping data collection...")
+        #     break
 
         # ตรวจสอบว่ามีข้อมูลส่งเข้ามาหรือไม่
         if ser.in_waiting > 0:
