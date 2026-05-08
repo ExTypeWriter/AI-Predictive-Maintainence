@@ -4,7 +4,7 @@ import os
 # การตั้งค่าพอร์ตและความเร็ว
 PORT = 'COM11' 
 BAUDRATE = 115200
-FILENAME = 'fail_data.csv'
+FILENAME = 'fail_data_speed_1.csv'
 
 data_list = []
 MAX_ROWS = 125000
